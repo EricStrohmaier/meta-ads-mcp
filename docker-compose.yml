@@ -1,0 +1,18 @@
+services:
+  meta-ads-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - META_ACCESS_TOKEN=${META_ACCESS_TOKEN}
+      - META_APP_ID=${META_APP_ID:-}
+      - META_APP_SECRET=${META_APP_SECRET:-}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:3000/mcp')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
